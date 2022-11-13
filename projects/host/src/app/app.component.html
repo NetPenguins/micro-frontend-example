@@ -18,8 +18,15 @@
           </mat-nav-list>
         </mat-sidenav>
         <mat-sidenav-content>
-          <main #placeHolder>
-            <p>Hello there</p>
+          <main>
+            <section id="stats">
+              <div id="statsel">
+                <ng-template #stats></ng-template>
+              </div>
+              <div id="rosterel">
+                <ng-template #roster ></ng-template>
+              </div>
+            </section>
           </main>
         </mat-sidenav-content>
       </mat-sidenav-container>

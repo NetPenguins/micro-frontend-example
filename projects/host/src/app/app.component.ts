@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ApplicationRef, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, createComponent, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 @Component({
@@ -7,13 +7,14 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  @ViewChild('placeHolder', { read: ViewContainerRef, static: true }) viewContainer!: ViewContainerRef;
-
+  @ViewChild('stats', { read: ViewContainerRef, static: true }) statsContainer!: ViewContainerRef;
+  @ViewChild('roster', { read: ViewContainerRef, static: true }) rosterContainer!: ViewContainerRef;
+  
   title = 'host';
   private _mobileQueryListener!: () => void;
   mobileQuery!: MediaQueryList;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher) {
+  
+  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private resolver: ComponentFactoryResolver) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -29,12 +30,23 @@ export class AppComponent implements OnInit {
   }
 
   async onStats() {
-    this.viewContainer.clear();
-    const Comp = await loadRemoteModule({
+    await loadRemoteModule({
       type: 'module',
       remoteEntry: 'http://localhost:4201/statsRemoteEntry.js',
       exposedModule: './Component',
-    });
-    this.viewContainer.createComponent(Comp.Component);
+    }).then((stats) => {
+      this.statsContainer.clear();
+      const compRef = this.statsContainer.createComponent(stats.AppComponent);
+    }).catch(e => console.error(e));
+    
+    await loadRemoteModule({
+      type: 'module',
+      remoteEntry: 'http://localhost:4202/remoteEntry.js',
+      exposedModule: './Component',
+    }).then((roster) => {
+      this.rosterContainer.clear();
+      const rosterfactory = this.resolver.resolveComponentFactory(roster.AppComponent)
+      roster = this.rosterContainer.createComponent(roster.AppComponent);
+    }).catch(e => console.error(e));     
   }
 }
