@@ -59,8 +59,8 @@
 							"extraWebpackConfig": "projects/host/webpack.prod.config.js"
 						},
 						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
+							"buildOptimizer": true,
+							"optimization": true,
 							"vendorChunk": true,
 							"extractLicenses": false,
 							"sourceMap": true,
@@ -171,8 +171,8 @@
 							"extraWebpackConfig": "projects/stats/webpack.prod.config.js"
 						},
 						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
+							"buildOptimizer": true,
+							"optimization": true,
 							"vendorChunk": true,
 							"extractLicenses": false,
 							"sourceMap": true,
@@ -282,8 +282,8 @@
 							"extraWebpackConfig": "projects/roster/webpack.prod.config.js"
 						},
 						"development": {
-							"buildOptimizer": false,
-							"optimization": false,
+							"buildOptimizer": true,
+							"optimization": true,
 							"vendorChunk": true,
 							"extractLicenses": false,
 							"sourceMap": true,
