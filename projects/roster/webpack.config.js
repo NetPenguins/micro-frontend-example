@@ -34,13 +34,6 @@ module.exports = {
         exposes: {
             './Component': './projects/roster/src/app/app.component.ts',
         },        
-        
-        // For hosts (please adjust)
-        // remotes: {
-        //     "host": "http://localhost:4200/remoteEntry.js",
-        //     "stats": "http://localhost:4201/remoteEntry.js",
-
-        // },
 
         shared: share({
           "@angular/core": { singleton: true, strictVersion: true, requiredVersion: 'auto' }, 

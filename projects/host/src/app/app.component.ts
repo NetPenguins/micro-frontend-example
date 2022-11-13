@@ -1,4 +1,4 @@
-import { ApplicationRef, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, createComponent, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, HostBinding, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 @Component({
@@ -9,7 +9,7 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
 export class AppComponent implements OnInit {
   @ViewChild('stats', { read: ViewContainerRef, static: true }) statsContainer!: ViewContainerRef;
   @ViewChild('roster', { read: ViewContainerRef, static: true }) rosterContainer!: ViewContainerRef;
-  
+  @HostBinding('class') className = '';
   title = 'host';
   private _mobileQueryListener!: () => void;
   mobileQuery!: MediaQueryList;
@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+    this.className = this.className == '' ? 'darkMode' : 'darkMode'
   }
 
   ngOnInit() {
@@ -25,6 +26,11 @@ export class AppComponent implements OnInit {
     this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
+
+  toggleTheme() {
+    this.className = this.className == '' ? 'darkMode' : ''
+  }
+
   opened(){
     return this.mobileQuery.matches ? '' : 'opened';
   }
@@ -37,7 +43,10 @@ export class AppComponent implements OnInit {
     }).then((stats) => {
       this.statsContainer.clear();
       const compRef = this.statsContainer.createComponent(stats.AppComponent);
-    }).catch(e => console.error(e));
+    }).catch((e) => {
+      console.error(`Unable to load element: ${e}`);
+      document.getElementById('statsel')?.remove();
+    });
     
     await loadRemoteModule({
       type: 'module',
@@ -45,8 +54,10 @@ export class AppComponent implements OnInit {
       exposedModule: './Component',
     }).then((roster) => {
       this.rosterContainer.clear();
-      const rosterfactory = this.resolver.resolveComponentFactory(roster.AppComponent)
-      roster = this.rosterContainer.createComponent(roster.AppComponent);
-    }).catch(e => console.error(e));     
+      this.rosterContainer.createComponent(roster.AppComponent);
+    }).catch((e) => {
+      console.error(`Unable to load element: ${e}`);
+      document.getElementById('rosterel')?.remove();
+    });     
   }
 }

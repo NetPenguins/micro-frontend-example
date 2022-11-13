@@ -48,6 +48,15 @@ footer {
     z-index: 2;
   }
   
+  .example-toolbar {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #logo {
+    display: flex;
+  }
+
   h1.example-app-name {
     margin-left: 8px;
   }
@@ -66,6 +75,10 @@ footer {
     /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
        `<body>` to be our scrolling element for mobile layouts. */
     flex: 1 0 auto;
+  }
+
+  .mat-icon {
+    vertical-align: middle;
   }
 
   #stats {
