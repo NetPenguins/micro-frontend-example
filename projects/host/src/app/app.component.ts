@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, ComponentFactoryResolver, HostBinding, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { loadRemoteModule } from '@angular-architects/module-federation';
+import { getManifest, loadRemoteModule } from '@angular-architects/module-federation';
+import { CustomManifest, CustomRemoteConfig } from './utils/config';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,8 +9,10 @@ import { loadRemoteModule } from '@angular-architects/module-federation';
 })
 export class AppComponent implements OnInit {
   @ViewChild('stats', { read: ViewContainerRef, static: true }) statsContainer!: ViewContainerRef;
-  @ViewChild('roster', { read: ViewContainerRef, static: true }) rosterContainer!: ViewContainerRef;
   @HostBinding('class') className = '';
+
+  remotes: CustomRemoteConfig[] = [];
+  remoteComps: any[] = [];
   title = 'host';
   private _mobileQueryListener!: () => void;
   mobileQuery!: MediaQueryList;
@@ -25,6 +28,8 @@ export class AppComponent implements OnInit {
     this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+    const manifest = getManifest<CustomManifest>();
+    this.remotes = Object.values(manifest);
   }
 
   toggleTheme() {
@@ -36,28 +41,26 @@ export class AppComponent implements OnInit {
   }
 
   async onStats() {
-    await loadRemoteModule({
-      type: 'module',
-      remoteEntry: 'http://localhost:4201/statsRemoteEntry.js',
-      exposedModule: './Component',
-    }).then((stats) => {
-      this.statsContainer.clear();
-      const compRef = this.statsContainer.createComponent(stats.AppComponent);
-    }).catch((e) => {
-      console.error(`Unable to load element: ${e}`);
-      document.getElementById('statsel')?.remove();
-    });
-    
-    await loadRemoteModule({
-      type: 'module',
-      remoteEntry: 'http://localhost:4202/remoteEntry.js',
-      exposedModule: './Component',
-    }).then((roster) => {
-      this.rosterContainer.clear();
-      this.rosterContainer.createComponent(roster.AppComponent);
-    }).catch((e) => {
-      console.error(`Unable to load element: ${e}`);
-      document.getElementById('rosterel')?.remove();
-    });     
+    console.debug("GRABBING REMOTES");
+    console.debug(this.remotes);
+    this.remoteComps.forEach(c => {
+      c.destroy();
+    })
+    this.remotes.map(async remote => {
+      //Load in remote component
+      console.debug(remote)
+      await loadRemoteModule({
+        type: 'module',
+        remoteEntry: remote.remoteEntry,
+        exposedModule: remote.exposedModule,
+      }).then((module) => {
+        const compRef = this.statsContainer.createComponent(module[remote.ngModuleName]);
+        this.remoteComps.push(compRef);
+      }).catch((e) => {
+        console.error(`Unable to load element: ${e}`);
+        document.getElementById('statsel')?.remove();
+      });
+    })
+  
   }
 }

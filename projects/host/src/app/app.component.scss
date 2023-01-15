@@ -87,6 +87,11 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    > * {
+      max-height: 40%;
+      display: inline-block;
+      height: 100%;
+    }
     // display: grid;
     // // align-items: center;
     // grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));

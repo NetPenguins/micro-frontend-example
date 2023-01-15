@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialExampleModule } from 'projects/roster/material.module';
+import { MaterialExampleModule } from 'material.module';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
