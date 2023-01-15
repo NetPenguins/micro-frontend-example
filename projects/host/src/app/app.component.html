@@ -1,0 +1,45 @@
+<section id="layout">
+  <header>
+    <mat-toolbar color="primary" class="example-toolbar">
+      <div id="logo">
+        <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+        <h1 style="line-height: 2;" class="example-app-name">Responsive App</h1>
+      </div>
+      <div>
+        <mat-icon>bedtime</mat-icon>
+        <mat-slide-toggle (change)="toggleTheme()" class="mr-8"></mat-slide-toggle>
+        <mat-icon class="mr-8">brightness_5</mat-icon>
+      </div>
+    </mat-toolbar>
+  </header>
+  <nav> 
+    <div class="example-container"> 
+      <mat-sidenav-container class="example-sidenav-container">
+        <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                    [fixedInViewport]="mobileQuery.matches">
+          <mat-nav-list>
+            <a mat-list-item routerLink="/"><mat-icon>home</mat-icon></a>
+            <button (click)="onStats()" mat-list-item ><mat-icon>analytics</mat-icon></button>
+          </mat-nav-list>
+        </mat-sidenav>
+        <mat-sidenav-content>
+          <main>
+            <section id="stats">
+              <ng-template #stats></ng-template>
+              <!-- <div id="statsel">
+                <ng-template #stats></ng-template>
+              </div>
+              <div id="rosterel">
+                <ng-template #roster ></ng-template>
+              </div> -->
+            </section>
+          </main>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
+  </nav>
+  
+  <footer>
+
+  </footer>
+</section>

@@ -1,0 +1,14 @@
+{
+	"stats": {
+		"remoteEntry": "http://localhost:8082/stats/statsRemoteEntry.js",
+		"exposedModule": "./Component",
+		"displayName": "Stats",
+		"ngModuleName": "AppComponent"
+	},
+	"roster": {
+		"remoteEntry": "http://localhost:8082/roster/remoteEntry.js",
+		"exposedModule": "./Component",
+		"displayName": "Roster",
+		"ngModuleName": "AppComponent"
+	}
+}

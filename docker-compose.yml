@@ -1,0 +1,20 @@
+version: '3.9'
+services: 
+  host:
+    build: ./projects/host/.
+    expose:
+      - 8000
+    ports:
+      - 8082:8000
+  roster:
+    build: ./projects/roster/.
+    expose:
+      - 8000
+    ports:
+      - 8083:8000
+  stats:
+    build: ./projects/stats/.
+    expose:
+      - 8000
+    ports:
+      - 8084:8000
