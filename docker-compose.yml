@@ -10,11 +10,7 @@ services:
     build: ./projects/roster/.
     expose:
       - 8000
-    ports:
-      - 8083:8000
   stats:
     build: ./projects/stats/.
     expose:
       - 8000
-    ports:
-      - 8084:8000
